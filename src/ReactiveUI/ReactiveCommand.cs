@@ -270,6 +270,11 @@ namespace ReactiveUI
         /// <param name="outputScheduler">
         /// An optional scheduler that is used to surface events. Defaults to <c>RxApp.MainThreadScheduler</c>.
         /// </param>
+        /// <example>
+        /// <code>
+        /// ReactiveCommand command = ReactiveCommand.CreateFromTask(async => await ExecuteAsync(), canExecute, RxApp.TaskpoolScheduler);
+        /// </code>
+        /// </example>
         /// <returns>
         /// The <c>ReactiveCommand</c> instance.
         /// </returns>
@@ -299,6 +304,11 @@ namespace ReactiveUI
         /// <param name="outputScheduler">
         /// An optional scheduler that is used to surface events. Defaults to <c>RxApp.MainThreadScheduler</c>.
         /// </param>
+        /// <example>
+        /// <code>
+        /// ReactiveCommand command = ReactiveCommand.CreateFromTask(async => await ExecuteAsync(), canExecute, RxApp.TaskpoolScheduler);
+        /// </code>
+        /// </example>
         /// <returns>
         /// The <c>ReactiveCommand</c> instance.
         /// </returns>
@@ -328,6 +338,11 @@ namespace ReactiveUI
         /// <param name="outputScheduler">
         /// An optional scheduler that is used to surface events. Defaults to <c>RxApp.MainThreadScheduler</c>.
         /// </param>
+        /// <example>
+        /// <code>
+        /// ReactiveCommand command = ReactiveCommand.CreateFromTask(async => await ExecuteAsync(), canExecute, RxApp.TaskpoolScheduler);
+        /// </code>
+        /// </example>
         /// <returns>
         /// The <c>ReactiveCommand</c> instance.
         /// </returns>
@@ -354,6 +369,11 @@ namespace ReactiveUI
         /// <param name="outputScheduler">
         /// An optional scheduler that is used to surface events. Defaults to <c>RxApp.MainThreadScheduler</c>.
         /// </param>
+        /// <example>
+        /// <code>
+        /// ReactiveCommand command = ReactiveCommand.CreateFromTask(async => await ExecuteAsync(), canExecute, RxApp.TaskpoolScheduler);
+        /// </code>
+        /// </example>
         /// <returns>
         /// The <c>ReactiveCommand</c> instance.
         /// </returns>
