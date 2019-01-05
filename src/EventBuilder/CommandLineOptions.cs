@@ -16,7 +16,7 @@ namespace EventBuilder
         /// <summary>
         /// Gets or sets the platform.
         /// </summary>
-        [Option('p', "platform", Required = true, HelpText = "Platform to automatically generate. Possible options include: NONE, ANDROID, IOS, WPF, MAC, TIZEN, UWP, XAMFORMS, WINFORMS, TVOS")]
+        [Option('p', "platform", Required = true, HelpText = "Platform to automatically generate. Possible options include: NONE, ANDROID, IOS, WPF, MAC, TIZEN, UWP, XAMFORMS, XAMESSENTIALS, WINFORMS, TVOS, APPCENTER")]
         public AutoPlatform Platform { get; set; }
 
         /// <summary>

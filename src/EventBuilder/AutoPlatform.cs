@@ -65,6 +65,11 @@ namespace EventBuilder
         /// <summary>
         /// Xamarin Essentials platform.
         /// </summary>
-        Essentials
+        Essentials,
+
+        /// <summary>
+        /// Microsoft AppCenter platform.
+        /// </summary>
+        AppCenter
     }
 }

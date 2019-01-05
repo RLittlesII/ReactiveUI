@@ -28,13 +28,14 @@ namespace EventBuilder
         public static async Task Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-                .ReadFrom.AppSettings()
+                .ReadFrom
+                .AppSettings()
                 .CreateLogger();
 
             // allow app to be debugged in visual studio.
             if (Debugger.IsAttached)
             {
-                args = "--platform=essentials --output-path=test.txt".Split(' ');
+                args = "--platform=appcenter --output-path=test.txt".Split(' ');
             }
 
             await new Parser(parserSettings => parserSettings.CaseInsensitiveEnumValues = true).ParseArguments<CommandLineOptions>(args).MapResult(
@@ -42,6 +43,7 @@ namespace EventBuilder
                 {
                     try
                     {
+
                         if (!string.IsNullOrWhiteSpace(options.Template))
                         {
                             _mustacheTemplate = options.Template;
@@ -119,6 +121,10 @@ namespace EventBuilder
                                 _mustacheTemplate = "XamarinEssentialsTemplate.mustache";
                                 break;
 
+                            case AutoPlatform.AppCenter:
+                                platform = new AppCenter();
+                                _mustacheTemplate = "Templates\\MicrosoftAppCenterTemplate.mustache";
+                                break;
                             default:
                                 throw new ArgumentException($"Platform not {options.Platform} supported");
                         }
@@ -165,6 +171,7 @@ namespace EventBuilder
 
             switch (platform.Platform)
             {
+                case AutoPlatform.AppCenter:
                 case AutoPlatform.Essentials:
                     namespaceData = StaticEventTemplateInformation.Create(targetAssemblies);
                     break;
@@ -179,6 +186,10 @@ namespace EventBuilder
             {
                 var template = await streamReader.ReadToEndAsync().ConfigureAwait(false);
                 var stubble = new StubbleBuilder().Build();
+
+                Log.Debug("DelegateNamespaces: {delegateNamespaces}", delegateData);
+                Log.Debug("Namespaces: {namespaces}", namespaceData);
+
                 var result = (await stubble.RenderAsync(template, new { Namespaces = namespaceData, DelegateNamespaces = delegateData }).ConfigureAwait(false))
                     .Replace("System.String", "string")
                     .Replace("System.Object", "object")

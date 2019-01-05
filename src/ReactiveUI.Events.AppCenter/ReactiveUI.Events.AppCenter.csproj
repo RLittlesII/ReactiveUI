@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>ReactiveUI.Events.AppCenter</AssemblyName>
+    <RootNamespace>ReactiveUI.Events</RootNamespace>
+    <Description>Provides Observable-based events API for Microsoft AppCenter eventhandlers. The contents of this package is automatically generated, please target pull-requests to the code generator.</Description>
+    <PackageId>ReactiveUI.Events.AppCenter</PackageId>
+    <NoWarn>$(NoWarn);CS1570;CA1812</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="*.cs" />
+    <None Include="*.cs" />
+    <Compile Include="../ReactiveUI.Events/SingleAwaitSubject.cs" />
+    <PackageReference Include="System.Reactive" Version="4.0.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AppCenter" Version="1.12.*" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="1.12.*" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="1.12.*" />
+    <PackageReference Include="Microsoft.AppCenter.Distribute" Version="1.12.*" />
+    <PackageReference Include="Microsoft.AppCenter.Push" Version="1.12.*" />
+    <Compile Include="Events_APPCENTER.cs" />
+  </ItemGroup>
+</Project>

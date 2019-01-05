@@ -118,16 +118,17 @@ var packageWhitelist = new[]
 
 (string targetName, string destination)[] eventGenerators = new[]
 {
-    ("android", "src/ReactiveUI.Events/"),
-    ("ios", "src/ReactiveUI.Events/"),
-    ("mac", "src/ReactiveUI.Events/"),
-    ("uwp", "src/ReactiveUI.Events/"),
-    ("tizen4", "src/ReactiveUI.Events/"),
-    ("wpf", "src/ReactiveUI.Events.WPF/"),
-    ("xamforms", "src/ReactiveUI.Events.XamForms/"),
-    ("winforms", "src/ReactiveUI.Events.Winforms/"),
-    ("essentials", "src/ReactiveUI.Events.XamEssentials/"),
-    ("tvos", "src/ReactiveUI.Events/"),
+    // ("android", "src/ReactiveUI.Events/"),
+    // ("ios", "src/ReactiveUI.Events/"),
+    // ("mac", "src/ReactiveUI.Events/"),
+    // ("uwp", "src/ReactiveUI.Events/"),
+    // ("tizen4", "src/ReactiveUI.Events/"),
+    // ("wpf", "src/ReactiveUI.Events.WPF/"),
+    // ("xamforms", "src/ReactiveUI.Events.XamForms/"),
+    // ("winforms", "src/ReactiveUI.Events.Winforms/"),
+    // ("essentials", "src/ReactiveUI.Events.XamEssentials/"),
+    // ("tvos", "src/ReactiveUI.Events/"),
+    ("appcenter", "src/ReactiveUI.Events.AppCenter/"),
 };
 
 // Define global marcos.
