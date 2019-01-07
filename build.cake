@@ -328,6 +328,14 @@ Task("UploadTestCoverage")
     }
 });
 
+
+Task("RunIntegrationTests")
+    .IsDependentOn("RunUnitTests")
+    .Does(() => 
+    {
+        DotNetCoreTest("./integrationtests/IntegrationTests.Shared.Tests.sln");
+    });
+
 Task("SignPackages")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
