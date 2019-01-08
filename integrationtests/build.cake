@@ -267,63 +267,6 @@ Task("RunIntegrationTests")
         DotNetCoreTest("./integrationtests/IntegrationTests.Shared.Tests.sln");
     });
 
-Task("SignPackages")
-    .WithCriteria(() => !local)
-    .WithCriteria(() => !isPullRequest)
-    .Does(() =>
-{
-    if(EnvironmentVariable("SIGNCLIENT_SECRET") == null)
-    {
-        throw new Exception("Client Secret not found, not signing packages.");
-    }
-
-    var nupkgs = GetFiles(packagesArtifactDirectory + "/*.nupkg");
-    foreach(FilePath nupkg in nupkgs)
-    {
-        var packageName = nupkg.GetFilenameWithoutExtension();
-        Information($"Submitting {packageName} for signing");
-
-        DotNetCoreTool("SignClient", new DotNetCoreToolSettings{
-            ArgumentCustomization = args =>
-                args.AppendSwitch("-c", "./SignPackages.json")
-                    .AppendSwitch("-i", nupkg.FullPath)
-                    .AppendSwitch("-r", EnvironmentVariable("SIGNCLIENT_USER"))
-                    .AppendSwitch("-s", EnvironmentVariable("SIGNCLIENT_SECRET"))
-                    .AppendSwitch("-n", "ReactiveUI")
-                    .AppendSwitch("-d", "ReactiveUI")
-                    .AppendSwitch("-u", "https://reactiveui.net")
-                });
-
-        Information($"Finished signing {packageName}");
-    }
-    
-    Information("Sign-package complete");
-});
-
-Task("Package")
-    .IsDependentOn("BuildReactiveUIPackages")
-    .IsDependentOn("PinNuGetDependencies")
-    .IsDependentOn("SignPackages")
-    .Does (() =>
-{
-});
-
-Task("PinNuGetDependencies")
-    .Does (() =>
-{
-    var packages = GetFiles(artifactDirectory + "*.nupkg");
-    foreach(var package in packages)
-    {
-        // only pin whitelisted packages.
-        if(packageWhitelist.Any(p => package.GetFilename().ToString().StartsWith(p, StringComparison.OrdinalIgnoreCase)))
-        {
-            // see https://github.com/cake-contrib/Cake.PinNuGetDependency
-            PinNuGetDependency(package, "ReactiveUI");
-        }
-    }
-});
-
-
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
@@ -338,38 +281,5 @@ Task("Default")
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
-
-RunTarget(target);
-///////////////////////////////////////////////////////////////////////////////
-// ARGUMENTS
-///////////////////////////////////////////////////////////////////////////////
-
-var target = Argument("target", "Default");
-var configuration = Argument("configuration", "Release");
-
-///////////////////////////////////////////////////////////////////////////////
-// SETUP / TEARDOWN
-///////////////////////////////////////////////////////////////////////////////
-
-Setup(ctx =>
-{
-   // Executed BEFORE the first task.
-   Information("Running tasks...");
-});
-
-Teardown(ctx =>
-{
-   // Executed AFTER the last task.
-   Information("Finished running tasks.");
-});
-
-///////////////////////////////////////////////////////////////////////////////
-// TASKS
-///////////////////////////////////////////////////////////////////////////////
-
-Task("Default")
-.Does(() => {
-   Information("Hello Cake!");
-});
 
 RunTarget(target);
