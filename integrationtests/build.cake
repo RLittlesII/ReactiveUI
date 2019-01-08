@@ -33,7 +33,6 @@
 //////////////////////////////////////////////////////////////////////
 
 #tool "dotnet:?package=SignClient&version=1.0.82"
-#tool "dotnet:?package=nbgv&version=2.3.38"
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -132,15 +131,6 @@ Setup(context =>
     }
 
     Information("Building version {0} of ReactiveUI.", informationalVersion);
-
-    CreateDirectory(artifactDirectory);
-    CleanDirectories(artifactDirectory);
-    CreateDirectory(testsArtifactDirectory);
-    CreateDirectory(eventsArtifactDirectory);
-    CreateDirectory(binariesArtifactDirectory);
-    CreateDirectory(packagesArtifactDirectory);
-
-    StartProcess(Context.Tools.Resolve("nbgv.*").ToString(), "cloud");
 });
 
 Teardown(context =>
@@ -192,141 +182,82 @@ Action<string, string, bool, bool> Build = (solution, packageOutputPath, createP
 // TASKS
 //////////////////////////////////////////////////////////////////////
 
-Task("BuildEventBuilder")
+Task("RunIntegrationTests")
     .Does(() =>
-{
-    Build("./src/EventBuilder.sln", artifactDirectory + "eventbuilder", false, false);
-});
-
-Task("GenerateEvents")
-    .IsDependentOn("BuildEventBuilder")
-    .Does (() =>
-{
-    var workingDirectory = MakeAbsolute(Directory("./src/EventBuilder/bin/Release/netcoreapp2.1"));
-    var eventBuilder = workingDirectory + "/EventBuilder.dll";
-    var referenceAssembliesPath = vsLocation.CombineWithFilePath("./Common7/IDE/ReferenceAssemblies/Microsoft/Framework");
-
-    Information(referenceAssembliesPath.ToString());
-
-    Action<string, string> generate = (string platform, string directory) =>
     {
-        var settings = new DotNetCoreExecuteSettings
+        var fodyPackages = new string[]
         {
-            WorkingDirectory = workingDirectory,
+            "ReactiveUI.Fody",
+            "ReactiveUI.Fody.Helpers",
+        };       
+
+        // Clean the directories since we'll need to re-generate the debug type.
+        CleanDirectories("./src/**/obj/Release");
+        CleanDirectories("./src/**/bin/Release");
+
+        foreach (var package in fodyPackages)
+        {
+            Build("./src/" + package + "/" + package + ".csproj", null, true, true);
+        }
+
+        var openCoverSettings =  new OpenCoverSettings {
+                ReturnTargetCodeOffset = 0,
+                MergeOutput = true,
+            }
+            .WithFilter("+[*]*")
+            .WithFilter("-[*.Testing]*")
+            .WithFilter("-[*.Tests*]*")
+            .WithFilter("-[ReactiveUI.Events]*")
+            .WithFilter("-[Splat*]*")
+            .ExcludeByAttribute("*.ExcludeFromCodeCoverage*")
+            .ExcludeByFile("*/*Designer.cs")
+            .ExcludeByFile("*/*.g.cs")
+            .ExcludeByFile("*/*.g.i.cs")
+            .ExcludeByFile("*splat/splat*")
+            .ExcludeByFile("*ApprovalTests*");
+
+        var xunitSettings = new XUnit2Settings {
+            HtmlReport = true,
+            OutputDirectory = testsArtifactDirectory,
+            NoAppDomain = true
         };
 
-        var filename = String.Format("Events_{0}.cs", platform);
-        var output = MakeAbsolute(File(System.IO.Path.Combine(directory, filename))).ToString().Quote();
-
-        Information("Generating events for '{0}'", platform);
-        DotNetCoreExecute(
-                    eventBuilder,
-                    new ProcessArgumentBuilder()
-                        .AppendSwitch("--platform","=", platform)
-                        .AppendSwitchQuoted("--reference","=", referenceAssembliesPath.ToString())
-                        .AppendSwitchQuoted("--output-path", "=", output),
-                    settings);
-
-        Information("The events have been written to '{0}'", output);
-    };
-
-    Parallel.ForEach(eventGenerators, arg => generate(arg.targetName, arg.destination));
-
-    CopyFiles(GetFiles("./src/ReactiveUI.**/Events_*.cs"), Directory(eventsArtifactDirectory));
-});
-
-Task("BuildReactiveUIPackages")
-    .IsDependentOn("GenerateEvents")
-    .Does (() =>
-{
-    // Clean the directories since we'll need to re-generate the debug type.
-    CleanDirectories("./src/**/obj/Release");
-    CleanDirectories("./src/**/bin/Release");
-
-    foreach(var package in packageWhitelist)
-    {
-        Build("./src/" + package + "/" + package + ".csproj", packagesArtifactDirectory, true, false);
-    }
-
-    CopyFiles(GetFiles("./src/**/bin/Release/**/*"), Directory(binariesArtifactDirectory), true);
-});
-
-Task("RunUnitTests")
-    .IsDependentOn("GenerateEvents")
-    .Does(() =>
-{
-    var fodyPackages = new string[]
-    {
-        "ReactiveUI.Fody",
-        "ReactiveUI.Fody.Helpers",
-    };       
-
-    // Clean the directories since we'll need to re-generate the debug type.
-    CleanDirectories("./src/**/obj/Release");
-    CleanDirectories("./src/**/bin/Release");
-
-    foreach (var package in fodyPackages)
-    {
-        Build("./src/" + package + "/" + package + ".csproj", null, true, true);
-    }
-
-    var openCoverSettings =  new OpenCoverSettings {
-            ReturnTargetCodeOffset = 0,
-            MergeOutput = true,
-        }
-        .WithFilter("+[*]*")
-        .WithFilter("-[*.Testing]*")
-        .WithFilter("-[*.Tests*]*")
-        .WithFilter("-[ReactiveUI.Events]*")
-        .WithFilter("-[Splat*]*")
-        .ExcludeByAttribute("*.ExcludeFromCodeCoverage*")
-        .ExcludeByFile("*/*Designer.cs")
-        .ExcludeByFile("*/*.g.cs")
-        .ExcludeByFile("*/*.g.i.cs")
-        .ExcludeByFile("*splat/splat*")
-        .ExcludeByFile("*ApprovalTests*");
-
-    var xunitSettings = new XUnit2Settings {
-        HtmlReport = true,
-        OutputDirectory = testsArtifactDirectory,
-        NoAppDomain = true
-    };
-
-    foreach (var projectName in packageTestWhitelist)
-    {
-        OpenCover(tool => 
+        foreach (var projectName in packageTestWhitelist)
         {
-            Build("./src/" + projectName + "/" + projectName + ".csproj", null, true, true);
+            OpenCover(tool => 
+            {
+                Build("./src/" + projectName + "/" + projectName + ".csproj", null, true, true);
 
-            tool.XUnit2("./src/" + projectName + "/bin/" + "**/*.Tests.dll", xunitSettings);
-        },
-        testCoverageOutputFile,
-        openCoverSettings);
-    }
+                tool.XUnit2("./src/" + projectName + "/bin/" + "**/*.Tests.dll", xunitSettings);
+            },
+            testCoverageOutputFile,
+            openCoverSettings);
+        }
 
-    ReportGenerator(testCoverageOutputFile, testsArtifactDirectory + "Report/");
-}).ReportError(exception =>
-{
-    var apiApprovals = GetFiles("./**/ApiApprovalTests.*");
-    CopyFiles(apiApprovals, artifactDirectory);
-});
+        ReportGenerator(testCoverageOutputFile, testsArtifactDirectory + "Report/");
+    })
+    .ReportError(exception =>
+    {
+        var apiApprovals = GetFiles("./**/ApiApprovalTests.*");
+        CopyFiles(apiApprovals, artifactDirectory);
+    });
 
 Task("UploadTestCoverage")
     .WithCriteria(() => !local)
     .WithCriteria(() => isRepository)
-    .IsDependentOn("RunUnitTests")
+    .IsDependentOn("RunIntegrationTests")
     .Does(() =>
-{
-    // Resolve the API key.
-    var token = EnvironmentVariable("CODECOV_TOKEN");
-    if (!string.IsNullOrEmpty(token))
     {
-        Information("Upload {0} to Codecov server", testCoverageOutputFile);
+        // Resolve the API key.
+        var token = EnvironmentVariable("CODECOV_TOKEN");
+        if (!string.IsNullOrEmpty(token))
+        {
+            Information("Upload {0} to Codecov server", testCoverageOutputFile);
 
-        // Upload a coverage report.
-        Codecov(testCoverageOutputFile.ToString(), token);
-    }
-});
+            // Upload a coverage report.
+            Codecov(testCoverageOutputFile.ToString(), token);
+        }
+    });
 
 
 Task("RunIntegrationTests")
@@ -346,25 +277,22 @@ Task("SignPackages")
         throw new Exception("Client Secret not found, not signing packages.");
     }
 
-    var nupkgs = GetFiles(packagesArtifactDirectory + "*.nupkg");
+    var nupkgs = GetFiles(packagesArtifactDirectory + "/*.nupkg");
     foreach(FilePath nupkg in nupkgs)
     {
         var packageName = nupkg.GetFilenameWithoutExtension();
         Information($"Submitting {packageName} for signing");
 
-        StartProcess(Context.Tools.Resolve("SignClient.*").ToString(), new ProcessSettings {
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            Arguments = new ProcessArgumentBuilder()
-                .Append("sign")
-                .AppendSwitch("-c", "./SignPackages.json")
-                .AppendSwitch("-i", nupkg.FullPath)
-                .AppendSwitch("-r", EnvironmentVariable("SIGNCLIENT_USER"))
-                .AppendSwitch("-s", EnvironmentVariable("SIGNCLIENT_SECRET"))
-                .AppendSwitch("-n", "ReactiveUI")
-                .AppendSwitch("-d", "ReactiveUI")
-                .AppendSwitch("-u", "https://reactiveui.net")
-            });
+        DotNetCoreTool("SignClient", new DotNetCoreToolSettings{
+            ArgumentCustomization = args =>
+                args.AppendSwitch("-c", "./SignPackages.json")
+                    .AppendSwitch("-i", nupkg.FullPath)
+                    .AppendSwitch("-r", EnvironmentVariable("SIGNCLIENT_USER"))
+                    .AppendSwitch("-s", EnvironmentVariable("SIGNCLIENT_SECRET"))
+                    .AppendSwitch("-n", "ReactiveUI")
+                    .AppendSwitch("-d", "ReactiveUI")
+                    .AppendSwitch("-u", "https://reactiveui.net")
+                });
 
         Information($"Finished signing {packageName}");
     }
