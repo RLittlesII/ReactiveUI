@@ -187,6 +187,26 @@ namespace ReactiveUI
                             : Observable.Throw<TOutput>(new UnhandledInteractionException<TInput, TOutput>(this, input))));
         }
 
+        public virtual Task<TOutput> HandleAsync(TInput input)
+        {
+            var context = new InteractionContext<TInput, TOutput>(input);
+
+            return GetHandlers()
+                   .Reverse()
+                   .ObserveOn(_handlerScheduler)
+                   .ToAsync()
+                   .Select(handler => Observable.Defer(() => handler(context)))
+                   .Concat()
+                   .TakeWhile(_ => !context.IsHandled)
+                   .IgnoreElements()
+                   .Select(_ => default(TOutput))
+                   .Concat(
+                           Observable.Defer(
+                                () => context.IsHandled
+                                      ? Task.FromResult(context.GetOutput())
+                                      : Observable.Throw<TOutput>(new UnhandledInteractionException<TInput, TOutput>(this, input))));
+        }
+
         /// <summary>
         /// Gets all registered handlers in order of their registration.
         /// </summary>
