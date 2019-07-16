@@ -52,40 +52,20 @@ namespace ReactiveUI
         /// <param name="view">The view.</param>
         /// <param name="viewModel">The view model.</param>
         /// <param name="handler">The handler.</param>
-        /// <returns></returns>
+        /// <returns>A reactive binding.</returns>
         public static IReactiveBinding<TView, TViewModel, TProp> BindInteraction<TView, TViewModel, TProp, TInput, TOutput>(
             this TView view,
             TViewModel viewModel,
             Expression<Func<InteractionContext<TInput, TOutput>, Task>> handler)
             where TViewModel : class
             where TView : class, IViewFor<TViewModel>
-            where TProp : Interaction<TInput, TOutput>
-        {
-            return new ReactiveBinding<TView, TViewModel, TProp>(view,
-                                                                 viewModel,
-                                                                 handler,
-                                                                 null,
-                                                                 source,
-                                                                 BindingDirection.OneWay,
-                                                                 Disposable.Create(() => { }));
-        }
-
-        public static IReactiveBinding<TView, TViewModel, TProp> BindInteraction<TView, TViewModel, TProp, TInput, TOutput, T>(
-            this TView view,
-            TViewModel viewModel,
-            Expression<Func<InteractionContext<TInput, TOutput>, IObservable<T>>> handler)
-            where TViewModel : class
-            where TView : class, IViewFor<TViewModel>
-            where TProp : Interaction<TInput, TOutput>
-        {
-            return new ReactiveBinding<TView, TViewModel, TProp>(
-                                                                 view,
-                                                                 viewModel,
-                                                                 handler,
-                                                                 vmExpression,
-                                                                 source,
-                                                                 BindingDirection.OneWay,
-                                                                 bindingDisposable);
-        }
+            where TProp : Interaction<TInput, TOutput> => new ReactiveBinding<TView, TViewModel, TProp>(
+                                                                                                        view,
+                                                                                                        viewModel,
+                                                                                                        handler,
+                                                                                                        null,
+                                                                                                        source,
+                                                                                                        BindingDirection.OneWay,
+                                                                                                        Disposable.Create(() => { }));
     }
 }
