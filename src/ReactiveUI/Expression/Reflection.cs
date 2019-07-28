@@ -414,7 +414,8 @@ namespace ReactiveUI
         {
             return view.WhenAnyValue(x => x.ViewModel)
                 .Where(x => x != null)
-                .Select(x => ((TViewModel)x).WhenAnyDynamic(expression, y => y.Value))
+                .Select(x => ((TViewModel)x)
+                .WhenAnyDynamic(expression, y => y.Value))
                 .Switch();
         }
     }
