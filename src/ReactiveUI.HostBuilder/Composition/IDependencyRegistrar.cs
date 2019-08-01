@@ -11,7 +11,7 @@ namespace ReactiveUI.HostBuilder
     /// The dependency registrar for the application.
     /// </summary>
     /// <seealso cref="Splat.IMutableDependencyResolver" />
-    public interface IDependencyRegistrar : IMutableDependencyResolver
+    public interface IDependencyRegistrar : IDependencyResolver
     {
     }
 }

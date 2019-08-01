@@ -9,6 +9,10 @@ namespace ReactiveUI.HostBuilder
 {
     public interface ICompositionRoot
     {
+        /// <summary>
+        /// Gets the root.
+        /// </summary>
+        /// <value>The root.</value>
         IDependencyResolver Root { get; }
     }
 }

@@ -17,6 +17,7 @@ namespace ReactiveUI.HostBuilder
 
         public static IApplicationBuilder WithDependencyResolver(this IApplicationBuilder hostBuilder, IDependencyResolver dependencyResolver)
         {
+            hostBuilder.SetDependencyRegistrar(dependencyResolver);
             return hostBuilder;
         }
     }
