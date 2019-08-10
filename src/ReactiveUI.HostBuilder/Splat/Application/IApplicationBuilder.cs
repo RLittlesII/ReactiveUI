@@ -6,7 +6,7 @@
 using System;
 using Splat;
 
-namespace ReactiveUI.HostBuilder
+namespace Splat
 {
     /// <summary>
     /// https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.hosting.ihostbuilder?view=aspnetcore-2.2

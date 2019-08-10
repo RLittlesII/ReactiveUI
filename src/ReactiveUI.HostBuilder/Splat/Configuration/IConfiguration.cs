@@ -3,16 +3,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-using Splat;
-
-namespace ReactiveUI.HostBuilder
+namespace Splat
 {
-    public interface ICompositionRoot
+    public interface IConfiguration
     {
-        /// <summary>
-        /// Gets the root.
-        /// </summary>
-        /// <value>The root.</value>
-        IDependencyResolver Root { get; }
     }
 }

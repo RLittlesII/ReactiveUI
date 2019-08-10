@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ReactiveUI.HostBuilder.Composition
+namespace Splat
 {
     /// <summary>
     /// Builds the application composition.
@@ -41,7 +41,7 @@ namespace ReactiveUI.HostBuilder.Composition
         ICompositionBuilder RegisterViewModels();
 
         /// <summary>
-        /// Build the <see cref="IContainer"/>.
+        /// Build the <see cref="ICompositionRoot"/>.
         /// </summary>
         /// <returns>The container.</returns>
         ICompositionRoot Build();

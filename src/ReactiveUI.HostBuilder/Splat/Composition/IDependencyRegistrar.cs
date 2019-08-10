@@ -3,16 +3,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-using System.Collections.Generic;
+using Splat;
 
-namespace ReactiveUI.HostBuilder
+namespace Splat
 {
-    public interface IConfigurationBuilder
+    /// <summary>
+    /// The dependency registrar for the application.
+    /// </summary>
+    /// <seealso cref="Splat.IMutableDependencyResolver" />
+    public interface IDependencyRegistrar : IDependencyResolver
     {
-        IEnumerable<IConfigurationSource> Sources { get; }
-
-        void Add(IConfigurationSource configurationSource);
-
-        IConfiguration Build();
     }
 }

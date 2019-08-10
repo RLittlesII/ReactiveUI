@@ -5,13 +5,14 @@
 
 using System;
 using System.Reactive.Concurrency;
+using Splat;
 
 namespace ReactiveUI.HostBuilder
 {
     /// <summary>
     /// Interface defining a <see cref="RxApp"/> instance.
     /// </summary>
-    /// <seealso cref="ReactiveUI.HostBuilder.IApplication" />
+    /// <seealso cref="IApplication" />
     public interface IReactiveUIApplication : IApplication
     {
         /// <summary>

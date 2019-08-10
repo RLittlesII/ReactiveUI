@@ -1,7 +1,7 @@
 ﻿using System;
 using Splat;
 
-namespace ReactiveUI.HostBuilder
+namespace Splat
 {
     public static class CompositionRootMixins
     {
@@ -18,6 +18,11 @@ namespace ReactiveUI.HostBuilder
             }
 
             return compositionRoot.Root as IReadonlyDependencyResolver;
+        }
+
+        public static ICompositionBuilder RegisterCommandBinders(this ICompositionRoot composition, Action<IDependencyResolver> registrar)
+        {
+            return composition;
         }
     }
 }

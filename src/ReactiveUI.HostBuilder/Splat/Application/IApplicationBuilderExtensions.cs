@@ -6,7 +6,7 @@
 using System.Text;
 using Splat;
 
-namespace ReactiveUI.HostBuilder
+namespace Splat
 {
     public static class IApplicationBuilderExtensions
     {

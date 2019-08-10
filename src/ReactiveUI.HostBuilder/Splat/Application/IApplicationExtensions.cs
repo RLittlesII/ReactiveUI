@@ -7,7 +7,7 @@ using System;
 using System.Reactive;
 using System.Reactive.Linq;
 
-namespace ReactiveUI.HostBuilder
+namespace Splat
 {
     public static class IApplicationExtensions
     {

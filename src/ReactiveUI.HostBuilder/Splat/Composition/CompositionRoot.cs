@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Splat;
 
-namespace ReactiveUI.HostBuilder.Composition
+namespace Splat
 {
     public sealed class CompositionRoot : ICompositionRoot
     {
