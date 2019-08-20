@@ -13,6 +13,6 @@ namespace Splat
         /// Gets the root.
         /// </summary>
         /// <value>The root.</value>
-        IReadonlyDependencyResolver Root { get; }
+        IDependencyResolver Root { get; }
     }
 }

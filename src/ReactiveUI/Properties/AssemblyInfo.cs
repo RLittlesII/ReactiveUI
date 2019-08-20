@@ -12,3 +12,4 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("ReactiveUI.XamForms")]
 [assembly: InternalsVisibleTo("ReactiveUI.AndroidSupport")]
 [assembly: InternalsVisibleTo("ReactiveUI.Uno")]
+[assembly: InternalsVisibleTo("ReactiveUI.HostBuilder")]
