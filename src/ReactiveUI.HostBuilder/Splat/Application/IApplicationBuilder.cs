@@ -4,6 +4,7 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
+using ReactiveUI;
 using Splat;
 
 namespace Splat
@@ -30,7 +31,7 @@ namespace Splat
         IApplicationBuilder ConfigureContainer(IContainerRegistry containerRegistry);
 
         IApplicationBuilder ConfigureServices(Action<IDependencyRegistrar> serviceCollection);
-        }
+    }
 
     public static class IApplicationBuilderMixins
     {
