@@ -18,7 +18,7 @@ namespace Splat
         /// Gets the dependency registrar.
         /// </summary>
         /// <value>The dependency registrar.</value>
-        IDependencyRegistrar DependencyRegistrar { get; }
+        IDependencyResolver DependencyRegistrar { get; }
 
         /// <summary>
         /// Builds this instance.
@@ -26,27 +26,25 @@ namespace Splat
         /// <returns>The application instance.</returns>
         IApplication Build();
 
+        /// <summary>
+        /// Configures the application configuration.
+        /// </summary>
+        /// <param name="configurationBuilder">The configuration builder.</param>
+        /// <returns>The application builder.</returns>
         IApplicationBuilder ConfigureAppConfiguration(Action<IConfigurationBuilder> configurationBuilder);
 
-        IApplicationBuilder ConfigureContainer(IContainerRegistry containerRegistry);
-
-        IApplicationBuilder ConfigureServices(Action<IDependencyRegistrar> serviceCollection);
-    }
-
-    public static class IApplicationBuilderMixins
-    {
         /// <summary>
-        /// Registers the platform.
+        /// Configures the container.
         /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="platformOperations">The platform operations.</param>
+        /// <param name="containerRegistry">The container registry.</param>
         /// <returns>The application builder.</returns>
-        public static IApplicationBuilder RegisterPlatform(
-            this IApplicationBuilder builder,
-            Func<IPlatformOperations> platformOperations)
-        {
-            builder.DependencyRegistrar.RegisterConstant(platformOperations, typeof(IPlatformOperations));
-            return builder;
-        }
+        IApplicationBuilder ConfigureContainer(IMutableDependencyResolver containerRegistry); // TODO: make this container agnostic?
+
+        /// <summary>
+        /// Configures the services.
+        /// </summary>
+        /// <param name="serviceCollection">The service collection.</param>
+        /// <returns>The application builder.</returns>
+        IApplicationBuilder ConfigureServices(Action<IDependencyResolver> serviceCollection);
     }
 }

@@ -9,6 +9,9 @@ using System.Reactive.Linq;
 
 namespace Splat
 {
+    /// <summary>
+    /// Extension methods to interact with the <see cref="IApplication"/>.
+    /// </summary>
     public static class IApplicationExtensions
     {
         /// <summary>

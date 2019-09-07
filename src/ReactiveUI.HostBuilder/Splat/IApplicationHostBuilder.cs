@@ -6,25 +6,26 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Splat;
 
 namespace ReactiveUI.HostBuilder.Splat
 {
-    public interface IAppHostBuilder
+    /// <summary>
+    /// Application host builder.
+    /// </summary>
+    public interface IApplicationHostBuilder
     {
         /// <summary>
         /// Builds this instance.
         /// </summary>
         /// <returns>An app host.</returns>
-        IAppHost Build();
+        IApplicationHost Build();
 
-        IApplicationBuilder ConfigureAppConfiguration(Action<IConfigurationBuilder> configurationBuilder);
-
-        IApplicationBuilder ConfigureContainer(IContainerRegistry containerRegistry);
-
-        IApplicationBuilder ConfigureServices(Action<IDependencyRegistrar> serviceCollection);
-    }
-
-    public interface IAppHost
-    {
+        /// <summary>
+        /// Uses the startup class to initialize the host.
+        /// </summary>
+        /// <typeparam name="T">The startup type.</typeparam>
+        /// <returns>An application host builder.</returns>
+        IApplicationHostBuilder UseStartup<T>();
     }
 }
