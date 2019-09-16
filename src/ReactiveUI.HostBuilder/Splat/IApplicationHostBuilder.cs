@@ -26,6 +26,10 @@ namespace ReactiveUI.HostBuilder.Splat
         /// </summary>
         /// <typeparam name="T">The startup type.</typeparam>
         /// <returns>An application host builder.</returns>
-        IApplicationHostBuilder UseStartup<T>();
+        IApplicationHostBuilder UseStartup<T>() where T : IStartup;
+    }
+
+    public interface IStartup
+    {
     }
 }
