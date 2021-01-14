@@ -60,7 +60,7 @@ namespace ReactiveUI
 
             var vmExpression = Reflection.Rewrite(vmProperty.Body);
             var controlExpression = Reflection.Rewrite(controlProperty.Body);
-            var source = Reflection.ViewModelWhenAnyValue(viewModel, view, vmExpression).Cast<TProp>();
+            var source = view.WhenViewModelChanged<TView, TViewModel>(vmExpression).Cast<TProp>();
 
             var bindingDisposable = BindCommandInternal(source, view, controlExpression, Observable.Defer(() => Observable.Return(withParameter())), toEvent ?? string.Empty, cmd =>
             {
@@ -125,7 +125,7 @@ namespace ReactiveUI
 
             var vmExpression = Reflection.Rewrite(vmProperty.Body);
             var controlExpression = Reflection.Rewrite(controlProperty.Body);
-            var source = Reflection.ViewModelWhenAnyValue(viewModel, view, vmExpression).Cast<TProp>();
+            var source = view.WhenViewModelChanged<TView, TViewModel>(vmExpression).Cast<TProp>();
 
             var bindingDisposable = BindCommandInternal(source, view, controlExpression, withParameter, toEvent);
 

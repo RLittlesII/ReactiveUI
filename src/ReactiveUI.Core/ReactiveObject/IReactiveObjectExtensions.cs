@@ -12,7 +12,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using Splat;
 
 namespace ReactiveUI
 {
@@ -419,7 +418,7 @@ namespace ReactiveUI
                 }
                 catch (Exception ex)
                 {
-                    rxObj.Log().Error(ex, "ReactiveObject Subscriber threw exception");
+                    // rxObj.Log().Error(ex, "ReactiveObject Subscriber threw exception");
                     if (!_thrownExceptions.IsValueCreated)
                     {
                         throw;

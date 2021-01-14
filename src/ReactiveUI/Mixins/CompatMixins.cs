@@ -18,11 +18,5 @@ namespace ReactiveUI
                 block(v);
             }
         }
-
-        internal static IEnumerable<T> SkipLast<T>(this IEnumerable<T> enumerable, int count)
-        {
-            var inputList = enumerable.ToList();
-            return inputList.Take(inputList.Count - count);
-        }
     }
 }

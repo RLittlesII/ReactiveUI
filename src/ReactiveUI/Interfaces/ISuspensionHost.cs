@@ -5,6 +5,7 @@
 
 using System;
 using System.Reactive;
+using Splat;
 
 namespace ReactiveUI
 {
@@ -25,7 +26,7 @@ namespace ReactiveUI
     /// host operating system publishes. Subscribe to these events in order to
     /// handle app suspend / resume.
     /// </summary>
-    public interface ISuspensionHost : IReactiveObject
+    public interface ISuspensionHost : IReactiveObject, IEnableLogger
     {
         /// <summary>
         /// Gets or sets the observable which signals when the application is launching new. This can happen when

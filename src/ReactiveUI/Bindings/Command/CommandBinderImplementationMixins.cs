@@ -45,7 +45,7 @@ namespace ReactiveUI
             }
 
             var paramExpression = Reflection.Rewrite(withParameter.Body);
-            var param = Reflection.ViewModelWhenAnyValue(viewModel, view, paramExpression);
+            var param = view.WhenViewModelChanged<TView, TViewModel>(paramExpression);
 
             return @this.BindCommand(viewModel, view, propertyName, controlName, param, toEvent);
         }

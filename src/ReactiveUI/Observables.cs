@@ -32,6 +32,6 @@ namespace System.Reactive.Linq
         /// This observable is equivalent to <c>Observable&lt;Unit&gt;.Default</c>, but is provided for convenience.
         /// </para>
         /// </remarks>
-        public static readonly IObservable<Unit> Unit = Observable<Unit>.Default;
+        public static readonly IObservable<Unit> Unit = Observable.Return(Reactive.Unit.Default);
     }
 }

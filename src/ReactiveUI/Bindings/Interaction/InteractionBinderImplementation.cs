@@ -38,7 +38,7 @@ namespace ReactiveUI
 
             var vmExpression = Reflection.Rewrite(propertyName.Body);
 
-            var source = Reflection.ViewModelWhenAnyValue(viewModel, view, vmExpression).Cast<Interaction<TInput, TOutput>>();
+            var source = Reflection.WhenViewModelChanged(viewModel, view, vmExpression).Cast<Interaction<TInput, TOutput>>();
 
             var interactionDisposable = new SerialDisposable();
 
@@ -70,7 +70,7 @@ namespace ReactiveUI
 
             var vmExpression = Reflection.Rewrite(propertyName.Body);
 
-            var source = Reflection.ViewModelWhenAnyValue(viewModel, view, vmExpression).Cast<Interaction<TInput, TOutput>>();
+            var source = view.WhenViewModelChanged<TView, TViewModel>(vmExpression).Cast<Interaction<TInput, TOutput>>();
 
             var interactionDisposable = new SerialDisposable();
 

@@ -4,14 +4,11 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
-using System.Diagnostics.Contracts;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
-
-using Splat;
 
 namespace ReactiveUI
 {
@@ -23,7 +20,7 @@ namespace ReactiveUI
     /// via the <see cref="OAPHCreationHelperMixin" /> extension methods.
     /// </summary>
     /// <typeparam name="T">The type.</typeparam>
-    public sealed class ObservableAsPropertyHelper<T> : IHandleObservableErrors, IDisposable, IEnableLogger
+    public sealed class ObservableAsPropertyHelper<T> : IHandleObservableErrors, IDisposable
     {
         private readonly Lazy<ISubject<Exception>> _thrownExceptions;
         private readonly ISubject<T> _subject;

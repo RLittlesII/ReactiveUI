@@ -389,7 +389,7 @@ namespace ReactiveUI
                                        : view.WhenAnyDynamic(viewExpression, x => (TVProp?)x.Value).Select(_ => false);
 
             var somethingChanged = Observable.Merge(
-                                                    Reflection.ViewModelWhenAnyValue(viewModel, view, vmExpression).Select(_ => true),
+                view.WhenViewModelChanged<TView, TViewModel>(vmExpression).Select(_ => true),
                                                     signalInitialUpdate.Select(_ => true),
                                                     signalObservable);
 

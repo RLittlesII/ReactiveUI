@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
+        <RootNamespace>ReactiveUI</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="DynamicData" Version="7.1.1" />
+      <PackageReference Include="System.Reactive" Version="5.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="IReactivePropertyChangedEventArgs.cs">
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="ReactivePropertyChangedEventArgs.cs">
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="ReactivePropertyChangingEventArgs.cs">
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="ScheduledSubject.cs">
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="WaitForDispatcherScheduler.cs">
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="ObservedChange.cs">
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="ObservedChangedMixin.cs">
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="IObservedChange.cs">
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="PreserveAttribute.cs">
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Expression\ExpressionMixins.cs">
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Observable.cs">
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
+</Project>
