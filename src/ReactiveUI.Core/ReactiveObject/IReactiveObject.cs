@@ -4,6 +4,7 @@
 // See the LICENSE file in the project root for full license information.
 
 using System.ComponentModel;
+using Splat;
 
 namespace ReactiveUI
 {
@@ -13,7 +14,7 @@ namespace ReactiveUI
     /// The primary use of this interface is to allow external classes such as
     /// the ObservableAsPropertyHelper to trigger these events inside the ViewModel.
     /// </summary>
-    public interface IReactiveObject : INotifyPropertyChanged, INotifyPropertyChanging
+    public interface IReactiveObject : INotifyPropertyChanged, INotifyPropertyChanging, IEnableLogger
     {
         /// <summary>
         /// Raise a property is changing event.
