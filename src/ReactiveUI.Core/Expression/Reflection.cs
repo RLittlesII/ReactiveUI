@@ -6,10 +6,14 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reactive.Linq;
 using System.Reflection;
 using System.Text;
+
+using Splat;
 
 namespace ReactiveUI
 {
@@ -393,11 +397,6 @@ namespace ReactiveUI
             return method.IsStatic;
         }
 
-        internal static IEnumerable<T> SkipLast<T>(this IEnumerable<T> enumerable, int count)
-        {
-            var inputList = enumerable.ToList();
-            return inputList.Take(inputList.Count - count);
-        }
 #pragma warning disable IDE0060 // Remove unused parameter
 #pragma warning disable RCS1163 // Unused parameter.
         internal static IObservable<object> ViewModelWhenAnyValue<TView, TViewModel>(TViewModel? viewModel, TView view, Expression? expression)
